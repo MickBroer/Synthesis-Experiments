@@ -8,17 +8,17 @@ Server.default.waitForBoot{
 	// function to reload SynthDef with different array size
 	~reloadSynth = {
 		| size = 10 |
-		~size = size;
+
 		SynthDef(\string, {
 			var freq = \freq.ir(440);
 			var ratio = \ratio.ir(2);
 			var depth = \depth.ir(0.2);
 			var env = Env([0.0, 1.0, 0.0], [\atk.ir(0.001), \rel.ir(2)], -10).kr(2);
 			var sig =
-			Array.fill(~size, {
+			Array.fill(size, {
 				arg i; Saw.ar(freq * (i+1/3)
 					+ (SinOsc.kr(ExpRand(100, 1000)).range(
-						freq * ratio * -1, freq * ratio) * depth)) * (1/~size).rand});
+						freq * ratio * -1, freq * ratio) * depth)) * (1/size).rand});
 
 			sig = LPF.ar(sig,\filterFreq.ir(400) + env.range(\minFilterFreqEnv.ir(-100), \maxFilterFreqEnv.ir(100)));
 			sig = sig * env;
